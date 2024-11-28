@@ -1,7 +1,7 @@
 
-# Processor Design and FPGA Deployment Guide
+# Processor Design and FPGA Deployment Guide - MiniMIPS
 
-This guide outlines the detailed steps required to set up, simulate, and deploy the processor design using Vivado and FPGA. Follow the instructions step-by-step for a seamless workflow.
+MiniMIPS is a compact and efficient RISC (Reduced Instruction Set Computer) processor inspired by the MIPS architecture. This project is a part of Computer Organisation and Architercture Lab [CS39001] Course. This guide outlines the detailed steps required to set up, simulate, and deploy the processor design using Vivado and FPGA. Follow the instructions step-by-step for a seamless workflow:
 
 ---
 
@@ -74,8 +74,7 @@ This guide outlines the detailed steps required to set up, simulate, and deploy 
   - Open each BRAM instance in Vivado.
   - Navigate to the **Initialization File** section.
   - Replace the existing file (if any) with the generated `.coe` file.
-- Verify:
-  - Each memory module has been updated with the correct `.coe` file.
+  - Verify Each memory module has been updated with the correct `.coe` file.
   - Perform a test synthesis to confirm proper initialization.
 
 ---
@@ -87,9 +86,6 @@ This guide outlines the detailed steps required to set up, simulate, and deploy 
 - Use Vivado’s simulation tools:
   - Check for correct control signal generation.
   - Verify datapath functionality (e.g., ALU operations, memory accesses).
-- Debug:
-  - Trace signals to identify mismatches between expected and observed behavior.
-  - Fix any logic errors before moving to FPGA deployment.
 
 ---
 
@@ -139,6 +135,7 @@ This guide outlines the detailed steps required to set up, simulate, and deploy 
 ### Folders
 - **DataPath**: Contains Verilog modules for the datapath design.
 - **ControlPath**: Contains Verilog modules for the control unit.
+- **Memory**: Contains correct configuration for BRAM Modules.
 
 ### Key Files
 - **Processor.v**: Top module for integrating the design.
