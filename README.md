@@ -15,6 +15,7 @@ MiniMIPS is a compact and efficient RISC (Reduced Instruction Set Computer) proc
   - Refer the Memory folder for exact configurations of both BRAM generated
   - Configure two separate memories: **Instruction Memory** and **Data Memory**.
   - Ensure that both memories have the required address widths and data widths.
+  - Add the wrapper modules **BRAM_Data.v** and **BRAM_Instructions.v**.
 
 ---
 
@@ -144,10 +145,3 @@ MiniMIPS is a compact and efficient RISC (Reduced Instruction Set Computer) proc
 - **assembler.py**: Python script to convert assembly code into `.coe` files.
 
 ---
-
-## **NOTES**
-- Always validate individual modules before integration.
-- Use Vivado's debugging tools to trace signal propagation and resolve issues.
-- Document observed outputs for post-deployment analysis.
-
---- 

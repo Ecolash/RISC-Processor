@@ -1,11 +1,20 @@
-module reg_bank(read_data1, read_data2, read_port1, read_port2, write_data, write_port, reset, clk, read, write);
-    input [31:0] write_data;
-    input clk, reset;
-    input [3:0] write_port, read_port1, read_port2;
-    output reg [31:0] read_data1, read_data2;
-    input read, write;
+module reg_bank(
+    input [31:0] write_data,
+    input clk,
+    input reset,
+    input [3:0] reg_select,
+    input [3:0] write_port,
+    input [3:0] read_port1,
+    input [3:0] read_port2,
+    input read,
+    input write,
+    output reg [31:0] read_data1,
+    output reg [31:0] read_data2,
+    output [31:0] reg_data_select
+);
 
-    reg [31:0] bank[15:0];
+    reg [31:0] bank[15:0]; 
+    assign reg_data_select = bank[reg_select];
 
     always @(negedge clk or posedge reset) begin
         if (reset) begin
@@ -23,8 +32,8 @@ module reg_bank(read_data1, read_data2, read_port1, read_port2, write_data, writ
     always @(posedge clk or posedge reset) begin
         if (reset) begin
             bank[0] <= {28'b0, 4'b0000};
-            bank[1] <= {28'b0, 4'b0001};
-            bank[2] <= {28'b0, 4'b0010};
+            bank[1] <= {28'b0, 4'b0000};
+            bank[2] <= {28'b0, 2'b0010};
             bank[3] <= {28'b0, 4'b0011};
             bank[4] <= {28'b0, 4'b0100};
             bank[5] <= {28'b0, 4'b0101};
@@ -59,4 +68,5 @@ module reg_bank(read_data1, read_data2, read_port1, read_port2, write_data, writ
             bank[15] <= bank[15];
         end
     end
+
 endmodule
