@@ -84,7 +84,6 @@ MiniMIPS is a compact and efficient RISC (Reduced Instruction Set Computer) proc
 - Simulate the integrated processor design:
   - Add a testbench to the `Processor.v` file.
   - Include realistic input stimuli (e.g., instruction sequences, initial data values).
-- Use Vivado’s simulation tools:
   - Check for correct control signal generation.
   - Verify datapath functionality (e.g., ALU operations, memory accesses).
 
