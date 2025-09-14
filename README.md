@@ -1,146 +1,160 @@
+# 🚀 MiniMIPS - RISC Processor Design and FPGA Deployment Guide 
 
-# Processor Design and FPGA Deployment Guide - MiniMIPS
+[![Made with Verilog](https://img.shields.io/badge/Made%20with-Verilog-blue.svg)]()  [![Vivado Tested](https://img.shields.io/badge/Tested%20on-Xilinx%20Vivado-green)]()  [![License](https://img.shields.io/badge/License-MIT-yellow.svg)]()  
 
-MiniMIPS is a compact and efficient RISC (Reduced Instruction Set Computer) processor inspired by the MIPS architecture. This project is a part of Computer Organisation and Architercture Lab [CS39001] Course. This guide outlines the detailed steps required to set up, simulate, and deploy the processor design using Vivado and FPGA. Follow the instructions step-by-step for a seamless workflow:
+**MiniMIPS** is a compact and efficient **RISC (Reduced Instruction Set Computer)** processor inspired by the **MIPS architecture**.  
+This project was developed as part of the **Computer Organisation and Architecture Lab [CS39001]** course.  
 
----
-
-## **SETUP PROCESS**
-
-### 1. **Create Instruction Memory and Data Memory**
-- Open **Vivado** and create a new project.
-- Use the **IP Catalog** feature:
-  - Navigate to the **Memory & Storage Elements** category.
-  - Select **Block Memory Generator**.
-  - Refer the Memory folder for exact configurations of both BRAM generated
-  - Configure two separate memories: **Instruction Memory** and **Data Memory**.
-  - Ensure that both memories have the required address widths and data widths.
-  - Add the wrapper modules **BRAM_Data.v** and **BRAM_Instructions.v**.
+It provides a **step-by-step workflow** for:  
+✔️ Designing in **Verilog**  
+✔️ Simulating in **Vivado**  
+✔️ Deploying on **FPGA**
 
 ---
 
-### 2. **Add Datapath Modules**
-- Copy all Verilog modules from the `DataPath` folder into the Vivado project:
-- For each module:
-  - Open and review its interface (inputs, outputs, and parameter declarations).
-  - Ensure no naming conflicts between modules.
-  - Add testbenches (if not already provided) to verify their standalone functionality.
-  - Check that wires between modules (e.g., ALU output to register bank input) are logically correct.
+## 📑 Table of Contents
+- [Overview](#overview)  
+- [Datapath](#datapath)  
+- [Setup Process](#setup-process)  
+- [File Descriptions](#file-descriptions)  
+- [Prerequisites](#prerequisites)  
+- [How to Run](#how-to-run)  
+- [Contributing](#contributing)  
+- [License](#license)  
 
 ---
 
-### 3. **Add Control Unit Modules**
-- Copy the `Control Unit` and `Branch Control` Verilog files into the project:
-  - **Control Unit**: Responsible for generating control signals based on instruction opcodes.
-  - **Branch Control**: Handles branching and jump operations.
-  - Use individual testbenches to validate signal generation for various instructions.
+## 🔎 Overview
+MiniMIPS implements a simplified ISA (Instruction Set Architecture) with a modular design philosophy.  
+It consists of a **datapath**, **control unit**, and **memory modules**, all integrated into a top-level processor that can be deployed on an FPGA.
 
 ---
 
-### 4. **Integrate Processor**
-- Copy the `Processor.v` file into the project.
-- Steps to integrate:
-  - Include connections to both the `DataPath` and `ControlPath` modules.
-  - Ensure input clock and reset signals are correctly routed.
-  - If the design involves hierarchical modules, verify module instantiations in `Processor.v`.
-  - Set as the **Top Module**, navigate to **Project Settings** > **Top Module** and select `Processor.v`.
-  - Run initial synthesis to check for unresolved ports or errors.
+## 📊 Datapath
+The datapath structure of MiniMIPS:
+
+![Datapath](https://raw.githubusercontent.com/Ecolash/Computer-Organisation-Architecture/main/Verilog-%20RISC%20ISA%20Design/P2%20-%20Design%20Specifications/Datapath.png)
 
 ---
 
-### 5. **Write Assembly Code**
-- Open the `instruction.s` file for reference.
-- Guidelines for writing assembly:
-  - Follow instruction formats and opcodes as defined in the ISA.
-  - Use comments to annotate each instruction for clarity.
-  - Avoid syntax errors by using the correct labels and delimiters.
-  - Cross-check assembly code with the provided ISA documentation to ensure correctness.
+## ⚙️ Setup Process
+
+### 1. Create Instruction & Data Memory
+- Open **Vivado** → create project → add **Block Memory Generator** (BRAM).  
+- Configure **Instruction Memory** & **Data Memory**.  
+- Add wrappers: `BRAM_Data.v` and `BRAM_Instructions.v`.  
 
 ---
 
-### 6. **Generate `.coe` Files**
-  - Use the `assembler.py` script to convert the assembly code into `.coe` files:
-  - Command: 
-    ```bash
-    python3 assembler.py <input_file.s>
-    ```
-  - Verify that the input `.s` file is in the same directory as `assembler.py`.
-  - Check the output `.coe` files for errors or missing values.
-  - If the `.coe` file is incorrect, revisit the assembly code and correct errors.
+### 2. Add Datapath Modules
+- Copy all modules from `DataPath/`.  
+- Verify **interfaces**, check **signal connectivity**, and run **testbenches**.  
 
 ---
 
-### 7. **Update Memory Modules**
-- Load the `.coe` files into the Instruction Memory and Data Memory modules:
-  - Open each BRAM instance in Vivado.
-  - Navigate to the **Initialization File** section.
-  - Replace the existing file (if any) with the generated `.coe` file.
-  - Verify Each memory module has been updated with the correct `.coe` file.
-  - Perform a test synthesis to confirm proper initialization.
+### 3. Add Control Unit
+- Import `Control Unit` & `Branch Control`.  
+- Validate **opcode decoding** and **branch logic**.  
 
 ---
 
-### 8. **Simulation Setup**
-- Simulate the integrated processor design:
-  - Add a testbench to the `Processor.v` file.
-  - Include realistic input stimuli (e.g., instruction sequences, initial data values).
-  - Check for correct control signal generation.
-  - Verify datapath functionality (e.g., ALU operations, memory accesses).
+### 4. Integrate Processor
+- Add `Processor.v` → connect datapath & control.  
+- Set as **Top Module**.  
+- Run **initial synthesis**.  
 
 ---
 
-### 9. **Add FPGA Wrapper**
-- Copy the `FPGA_Wrapper.v` file into the project.
-- Role of the wrapper:
-  - Maps internal processor signals to FPGA I/O pins.
-  - Adds any necessary interfacing logic.
-  - Ensure all FPGA pins are defined as inputs/outputs in the wrapper.
+### 5. Write Assembly Code
+- Reference: `instruction.s`.  
+- Follow **ISA format**, comment instructions, and validate against ISA doc.  
 
 ---
 
-### 10. **Add Constraints File**
-- Write and include the `FPGA_XDC.xdc` constraints file:
-  - Map FPGA pins to physical board pins (e.g., clock, reset, I/O signals).
-  - Ensure Pin mappings match the FPGA board specifications.
----
-
-### 11. **Run Synthesis, Implementation, and Generate Bitstream**
-- Steps in Vivado:
-  - **Synthesis**: Convert Verilog code into gate-level representation.
-  - **Implementation**: Map synthesized design onto the FPGA’s physical resources.
-  - **Generate Bitstream**: Create a file to program the FPGA.
-  - Monitor logs for errors or critical warnings.
+### 6. Generate `.coe` Files
+```bash
+python3 assembler.py <input_file.s>
+```
+- Produces `.coe` for memory initialization.  
 
 ---
 
-### 12. **Program the FPGA**
-- Open Vivado’s **Hardware Manager**.
-- Connect to the FPGA board:
-  - Ensure the board is powered and connected via USB/JTAG.
-  - Select the generated bitstream file and upload it to the FPGA.
-  - Verify successful programming through Vivado.
+### 7. Load Memory Modules
+- Assign `.coe` files to BRAMs in Vivado.  
+- Re-run synthesis.  
 
 ---
 
-### 13. **Observe Outputs**
-- Use FPGA input pins to select outputs for observation:
-  - `0000` → Current value from the **ALUOut PIPO Module**.
-  - `0001` to `1111` → Value stored in the **Register Bank** at the respective index.
-  - If outputs are incorrect, revisit the control signals and datapath connections.
+### 8. Simulation
+- Add testbench for `Processor.v`.  
+- Verify **control signals**, **ALU operations**, **memory access**.  
 
 ---
 
-## **FILE DESCRIPTIONS**
-
-### Folders
-- **DataPath**: Contains Verilog modules for the datapath design.
-- **ControlPath**: Contains Verilog modules for the control unit.
-- **Memory**: Contains correct configuration for BRAM Modules.
-
-### Key Files
-- **Processor.v**: Top module for integrating the design.
-- **FPGA_Wrapper.v**: Wrapper module for FPGA implementation.
-- **FPGA_XDC.xdc**: Constraints file for FPGA pin mapping.
-- **assembler.py**: Python script to convert assembly code into `.coe` files.
+### 9. FPGA Wrapper
+- Add `FPGA_Wrapper.v`.  
+- Map processor I/O to FPGA pins.  
 
 ---
+
+### 10. Add Constraints
+- Define pins in `FPGA_XDC.xdc`.  
+
+---
+
+### 11. Build Flow
+- Run **Synthesis → Implementation → Bitstream generation**.  
+
+---
+
+### 12. Program FPGA
+- Connect board via USB/JTAG.  
+- Upload `.bit` using Vivado.  
+
+---
+
+### 13. Debug & Observe
+- Input select pins → view ALU output or register bank.  
+- Debug incorrect outputs by rechecking **signals & control logic**.  
+
+---
+
+## 📂 File Descriptions
+| Folder / File | Description |
+|---------------|-------------|
+| `DataPath/`   | Verilog modules for datapath |
+| `ControlPath/`| Verilog control unit modules |
+| `Memory/`     | BRAM configurations |
+| `Processor.v` | Top-level integration |
+| `FPGA_Wrapper.v` | FPGA wrapper |
+| `FPGA_XDC.xdc` | FPGA pin constraints |
+| `assembler.py` | Assembly → `.coe` converter |
+
+---
+
+## 🛠️ Prerequisites
+- **Xilinx Vivado** (tested on 2020.2+)  
+- **FPGA Board** (e.g., Xilinx Artix-7 / Basys-3)  
+- **Python 3.8+** (for assembler)  
+
+---
+
+## ▶️ How to Run
+1. Clone repo:
+   ```bash
+   git clone https://github.com/<your-username>/<your-repo>.git
+   ```
+2. Open Vivado → Import all Verilog files.  
+3. Run steps from [Setup Process](#setup-process).  
+4. Program FPGA → test assembly code execution.  
+
+---
+
+## 🤝 Contributing
+Pull requests are welcome!  
+For major changes, open an issue first to discuss your ideas.  
+
+---
+
+## 📜 License
+This project is licensed under the **MIT License** – see the [LICENSE](LICENSE) file for details.
